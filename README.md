@@ -49,8 +49,8 @@ Dataset used：[selfie2anime](https://drive.google.com/file/d/1xOWj1UVgp6NKMT3Hb
 
 # [Environmental Requirements](#table-of-contents)
 
-- Hardware (Ascend/GPU/CPU)
-    - Use Ascend/GPU/CPU processor to build hardware environment.
+- Hardware (GPU)
+    - Use GPU processor to build hardware environment.
 - Framework
     - [MindSpore](https://www.mindspore.cn/install/en)
 - For more information, please check the following resources:
@@ -158,81 +158,7 @@ Both training and evaluation parameters can be configured in `../U-GAT-IT/src/de
 
 Go to the directory `../U-GAT-IT/`, and after installing MindSpore through the official website, you can follow the steps below for training and evaluation (the decompressed dataset needs to be placed in the directory `../U-GAT-IT/`):
 
-- Training on Ascend 910
 
-  ```shell
-  # Standalone training
-  bash ./scripts/run_standalone_train_910.sh [DEVICE_ID]
-
-  # Distributed training
-  bash ./scripts/run_distributed_train_910.sh [RANK_TABLE] [RANK_SIZE] [DEVICE_START]
-  ```
-
-  Example:
-
-  ```shell
-  # Standalone training
-  bash ./scripts/run_standalone_train_910.sh 0
-
-  # Ascend multi-card training (8P)
-  bash ./scripts/run_distributed_train_910.sh ./rank_table_8pcs.json 8 0
-  ```
-
-- Evaluation on Ascend 910
-
-  ```shell
-  # Evaluation
-  bash ./scripts/run_eval_910.sh [DEVICE_ID]
-  ```
-
-  Example:
-
-  ```shell
-  # Evaluation
-  bash ./scripts/run_eval_910.sh 0
-  ```
-
-- Train on ModelArts
-
-  Before training on ModelArts, configure the parameters in `../U-GAT-IT/src/default_config.yaml`. Please read the official documentation of [ModelArts](https://support.huaweicloud.com/modelarts/), and then follow the instructions below:
-
-  ```text
-  # Single card training on ModelArts
-  # (1) Execute a or b
-  # a. Set "enable_modelarts=True" in the default_config.yaml file
-  # Set "data_path='/cache/data'" in default_config.yaml file
-  # Set "ckpt_path='/cache/train'" in default_config.yaml file
-  # Set other parameters in default_config.yaml file
-  # b. Set "enable_modelarts=True" on the web page
-  # Set "data_path='/cache/data'" on the web page
-  # Set "ckpt_path='/cache/train'" on the web page
-  # Set other parameters on the web page
-  # (3) If you choose to fine-tune your model, upload your pre-trained model to the S3 bucket
-  # (4) Upload the original dataset to the S3 bucket.
-  # (5) Set your code path on the web page to "/path/U-GAT-IT"
-  # (6) Set the startup file as "train.py" on the web page
-  # (7) Set "training data set", "training output file path", "job log path", etc. on the web page
-  # (8) Create a training job
-  #
-  # 8-card training on ModelArts
-  # (1) Execute a or b
-  # a. Set "enable_modelarts=True" in the default_config.yaml file
-  # Set "data_path='/cache/data'" in default_config.yaml file
-  # Set "ckpt_path='/cache/train'" in default_config.yaml file
-  # Set "distributed=True" in default_config.yaml file
-  # Set other parameters in default_config.yaml file
-  # b. Set "enable_modelarts=True" on the web page
-  # Set "data_path='/cache/data'" on the web page
-  # Set "ckpt_path='/cache/train'" on the web page
-  # Set "distributed=True" on the page
-  # Set other parameters on the web page
-  # (3) If you choose to fine-tune your model, upload your pre-trained model to the S3 bucket
-  # (4) Upload the original dataset to the S3 bucket.
-  # (5) Set your code path on the web page to "/path/U-GAT-IT"
-  # (6) Set the startup file as "train.py" on the web page
-  # (7) Set "training data set", "training output file path", "job log path", etc. on the webpage
-  # (8) Create a training job
-  ```
 
 - Training on GPU
 
@@ -351,21 +277,21 @@ After training the generator model, you can export the ckpt file to MINDIR forma
 
 #### [U-GAT-IT on selfie2anime dataset](#table-of-contents)
 
-| Parameters          | Ascend                                                                                         | GPU                                                                                                                           |
-|---------------------|------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|
-| Model name          | U-GAT-IT                                                                                       | U-GAT-IT (light)                                                                                                              |
-| Resource            | Ascend: 8 * Ascend-910(32GB) <br /> ARM: 192 cores 2048GB <br /> CentOS 4.18.0-193.el8.aarch64 | GPU: 8 * GeForce RTX 3090 <br /> CPU 2.90GHz, 64 cores <br /> RAM:252G                                                        |
-| Upload date         | 2021-12-23                                                                                     | 2022-02-28                                                                                                                    |
-| MindSpore version   | 1.5.0                                                                                          | 1.5.0                                                                                                                         |
-| Datasets            | selfie2anime                                                                                   | selfie2anime                                                                                                                  |
-| Training parameters | epoch=100, batch_size = 1, lr=0.0001                                                           | light=True, epoch=100, batch_size=1, lr=0.000025, <br /> loss_scale=1.0, use_global_norm=False                                |
-| Optimizer           | Adam                                                                                           | Adam                                                                                                                          |
-| Loss function       | Custom loss function                                                                           | Custom loss function                                                                                                          |
-| Output              | Image                                                                                          | Image                                                                                                                         |
-| Speed               | 640ms/step                                                                                     | 690 ms/step                                                                                                                   |
-| Checkpoint          | 1.04GB, ckpt file                                                                              | 41 MB, ckpt file                                                                                                              |
-| Metrics             | -                                                                                              | Kernel Inception Distance (KID) <br /> Typical good results for KID metrics are in range (10.5, 12.5), <br /> lower is better |
-| KID                 | -                                                                                              | KID mean :  10.8664 <br /> KID stddev :  0.4290                                                                               |
+| Parameters          |GPU                                                                                                                           |
+|---------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| Model name          |  U-GAT-IT (light)                                                                                                              |
+| Resource            |  GPU: 8 * GeForce RTX 3090 <br /> CPU 2.90GHz, 64 cores <br /> RAM:252G                                                        |
+| Upload date         |  2022-02-28                                                                                                                    |
+| MindSpore version   | 1.5.0                                                                                                                         |
+| Datasets            | selfie2anime                                                                                                                  |
+| Training parameters | light=True, epoch=100, batch_size=1, lr=0.000025, <br /> loss_scale=1.0, use_global_norm=False                                |
+| Optimizer           | Adam                                                                                                                          |
+| Loss function       |  Custom loss function                                                                                                          |
+| Output              |  Image                                                                                                                         |
+| Speed               |  690 ms/step                                                                                                                   |
+| Checkpoint          |  41 MB, ckpt file                                                                                                              |
+| Metrics             |  Kernel Inception Distance (KID) <br /> Typical good results for KID metrics are in range (10.5, 12.5), <br /> lower is better |
+| KID                 | KID mean :  10.8664 <br /> KID stddev :  0.4290                                                                               |
 
 > The checkpoint of UGATIT trained on GPU (selfie2anime_genA2B_params_0000100.ckpt) and the checkpoit for metrics computation (inception.ckpt)
 > are available [here](https://disk.yandex.ru/d/_MbEh0uGG9_eyA).
